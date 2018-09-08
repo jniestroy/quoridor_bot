@@ -23,12 +23,12 @@ class My_Bot(IBot):
                     if board.isFencePlacingBlocking(coord_fence) == 0:
                         r = (board.Fence_Distance(coord_fence),coord_fence)
                         possible_fence.append(r)
-                else:
-                    for placed_fence in board.fences:
-                        if Path.ManhattanDistance(placed_fence.coord, coord_fence.coord) < 3 and  Path.ManhattanDistance(self.pawn.coord, coord_fence.coord) < 3:
-                            if board.isFencePlacingBlocking(coord_fence) == 0:
-                                r = (board.Fence_Distance(coord_fence),coord_fence)
-                                possible_fence.append(r)
+                # else:
+                #     for placed_fence in board.fences:
+                #         if Path.ManhattanDistance(placed_fence.coord, coord_fence.coord) < 3 and  Path.ManhattanDistance(self.pawn.coord, coord_fence.coord) < 3:
+                #             if board.isFencePlacingBlocking(coord_fence) == 0:
+                #                 r = (board.Fence_Distance(coord_fence),coord_fence)
+                #                 possible_fence.append(r)
         possible_fence.sort(key=lambda tup: tup[0],reverse = True)
         #print('New Move'
         # for i in possible_fence:
@@ -47,39 +47,38 @@ class My_Bot(IBot):
             if worst[0] - rand[0] < -1:
                 f = worst[1]
                 fence1 = Fence(self, None)
-                fence2 = Fence(self, None)
+                #fence2 = Fence(self, None)
                 if f.direction == Fence.DIRECTION.HORIZONTAL:
                     fence1.direction = Fence.DIRECTION.VERTICAL
-                    fence2.direction = Fence.DIRECTION.VERTICAL
-                    c1 = GridCoordinates.top(GridCoordinates.left((f.coord)))
-                    c2 = GridCoordinates.top(GridCoordinates.right(GridCoordinates.right(GridCoordinates.right(f.coord))))
+                    #fence2.direction = Fence.DIRECTION.VERTICAL
+                    c1 = GridCoordinates.top(GridCoordinates.right((f.coord)))
+                    #c2 = GridCoordinates.top(GridCoordinates.right(GridCoordinates.right(GridCoordinates.right(f.coord))))
                     fence1.coord = c1
-                    fence2.coord = c2
+                    #fence2.coord = c2
                 else:
                     fence1.direction = Fence.DIRECTION.HORIZONTAL
-                    fence2.direction = Fence.DIRECTION.HORIZONTAL
-                    c1 = GridCoordinates.bottom(GridCoordinates.bottom(GridCoordinates.bottom(GridCoordinates.left((f.coord)))))
-                    c2 = GridCoordinates.top(GridCoordinates.left(f.coord))
-                    fence1.coord = c1
-                    fence2.coord = c2
+                    #fence2.direction = Fence.DIRECTION.HORIZONTAL
+                    #c1 = GridCoordinates.bottom(GridCoordinates.bottom(GridCoordinates.bottom(GridCoordinates.left((f.coord)))))
+                    c2 = GridCoordinates.bottom(GridCoordinates.left(f.coord))
+                    #fence1.coord = c1
+                    fence1.coord = c2
 
         else:
             wall = False
         #print(worst[0])
         
-        if random.randint(0,0) == 0 and self.remainingFences() > 0 and len(board.storedValidFencePlacings) > 0 and wall:
+        if random.randint(0,10) == 0 and self.remainingFences() > 0 and len(board.storedValidFencePlacings) > 0 and wall:
             #print(rand[0])
             if (diff - worst[0]) > (rand[0] - diff) and board.isValidFencePlacing(fence1.coord,fence1.direction):
-            #if board.isValidFencePlacing(fence1.coord,fence1.direction):
-                
-                randomFencePlacing = fence1
-            elif (diff - worst[0]) > (rand[0] - diff) and board.isValidFencePlacing(fence2.coord,fence2.direction):#
-                randomFencePlacing = fence2
-                
+                for fences in board.storedValidFencePlacings:
+                    if fences.coord == fence1.coord and fences.direction == fence1.direction:
+                        randomFencePlacing = fences
+                        block_worst = 1
             else:
                 randomFencePlacing = rand[1]
+                block_worst = 0
             #print(randomFencePlacing.coord)
-            return randomFencePlacing
+            return (randomFencePlacing,rand[0] - diff,worst[0]- diff,block_worst)
         #print(possible_fence)
         #print("There are " + str(near_fence) + "Possible Fences Near")
         # if random.randint(0, 2) == 0 and self.remainingFences() > 0 and len(board.storedValidFencePlacings) > 0:
@@ -99,7 +98,8 @@ class My_Bot(IBot):
             p1 = (Path.Dijkstra(board,self.pawn.coord,board.endPositions(0)))
             for move in validPawnMoves:
                 if str(move) == str(p1.firstMove()):
-                    return move
+                    block_worst = 2
+                    return (move,0,0,block_worst)
             return random.choice(validPawnMoves)
 
 

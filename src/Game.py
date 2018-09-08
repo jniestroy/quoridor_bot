@@ -89,41 +89,45 @@ class Game:
             # Define randomly first player (coin toss)
             currentPlayerIndex = random.randrange(playerCount) 
             finished = False
-            csv = ''
+            move_list = []
             while not finished:
                 player = self.players[currentPlayerIndex]
                 opp = self.players[(currentPlayerIndex +1)%playerCount]
-                csv += str(currentPlayerIndex) + ','
+                opp_index = (currentPlayerIndex + 1)%playerCount
                 # The player chooses its action (manually for human players or automatically for bots)
                 if currentPlayerIndex == 0:# or currentPlayerIndex == 1:
-                    action = player.play(self.board,opp.pawn.coord)
+                    action,best_wall,worst_wall,block_worst = player.play(self.board,opp.pawn.coord)
                 else:
                     action = player.play(self.board)
-                if currentPlayerIndex == 0:
-                    p1 = (Path.Dijkstra(self.board,player.pawn.coord,self.board.endPositions(currentPlayerIndex)))
-                csv += str(action).replace(',','') + ','
+                
+                p1 = Path.length((Path.Dijkstra(self.board,player.pawn.coord,self.board.endPositions(currentPlayerIndex))))
+                p2 = Path.length((Path.Dijkstra(self.board,opp.pawn.coord,self.board.endPositions((opp_index)))))
                 if isinstance(action, PawnMove):
-                    csv += 'm'
+                    move = 'm'
                     player.movePawn(action.toCoord)
                     # Check if the pawn has reach one of the player targets
                     if player.hasWon():
                         finished = True
+                        move_list = [move for move in move_list if move[0] == currentPlayerIndex]
+                        print(move_list)
+
                         # print("Player %s won" % player.name)
                         player.score += 1
+                
                 elif isinstance(action, FencePlacing):
-                    csv += 'w' + ','
+                    move = 'f'
                     player.placeFence(action.coord, action.direction)
                 elif isinstance(action, Quit):
                     finished = True
                     # print("Player %s quitted" % player.name)
+                this_move = [currentPlayerIndex,p1,p2,player.remainingFences(),player.remainingFences()-opp.remainingFences(),best_wall,worst_wall,move,block_worst]
                 currentPlayerIndex = (currentPlayerIndex + 1) % playerCount
                 if INTERFACE:
                 	time.sleep(TEMPO_SEC)
-                csv += '\n'
-        # f = open('move_list.csv','w')
-        # f.write(csv)
-        # f.close
-        print()
+                move_list.append(this_move)
+                
+        
+
         #self.board.drawOnConsole()
         # Display final scores
         print("FINAL SCORES: ")
