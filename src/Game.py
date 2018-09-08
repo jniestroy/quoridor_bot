@@ -7,7 +7,8 @@
 #
 
 import random
-
+import sqlite3
+from sqlite3 import Error
 from src.Settings            import *
 from src.interface.Color     import *
 from src.interface.Board     import *
@@ -16,7 +17,31 @@ from src.player.Human        import *
 from src.action.PawnMove     import *
 from src.action.FencePlacing import *
 from src.Path                import *
-
+def create_connection(db_file):
+    """ create a database connection to the SQLite database
+        specified by db_file
+    :param db_file: database file
+    :return: Connection object or None
+    """
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+ 
+    return None
+def create_move(conn, move):
+    """
+    Create a new project into the projects table
+    :param conn:
+    :param project:
+    :return: project id
+    """
+    sql = ''' INSERT INTO gamedata(playerId,your_distance_to_end,opp_distance,walls_left,diff_walls,best_wall,worst_wall,move,block)
+              VALUES(?,?,?,?,?,?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, move)
+    return cur.lastrowid
 
 
 class Game:
@@ -68,6 +93,8 @@ class Game:
         """
         Launch a series of rounds; for each round, ask successively each player to play. 
         """
+        database = "C:\\sqlite\quoridor.db"
+        conn = create_connection(database)
         roundNumberZeroFill = len(str(roundCount))
         # For each round
         for roundNumber in range(1, roundCount + 1):
@@ -95,10 +122,11 @@ class Game:
                 opp = self.players[(currentPlayerIndex +1)%playerCount]
                 opp_index = (currentPlayerIndex + 1)%playerCount
                 # The player chooses its action (manually for human players or automatically for bots)
-                if currentPlayerIndex == 0:# or currentPlayerIndex == 1:
+                if currentPlayerIndex == 0 or currentPlayerIndex == 1:
                     action,best_wall,worst_wall,block_worst = player.play(self.board,opp.pawn.coord)
                 else:
                     action = player.play(self.board)
+                    best_wall,worst_wall,block_worst = 0,0,0
                 
                 p1 = Path.length((Path.Dijkstra(self.board,player.pawn.coord,self.board.endPositions(currentPlayerIndex))))
                 p2 = Path.length((Path.Dijkstra(self.board,opp.pawn.coord,self.board.endPositions((opp_index)))))
@@ -109,6 +137,9 @@ class Game:
                     if player.hasWon():
                         finished = True
                         move_list = [move for move in move_list if move[0] == currentPlayerIndex]
+                        with conn:
+                            for move in move_list:
+                                move_id = create_move(conn, move)
                         print(move_list)
 
                         # print("Player %s won" % player.name)

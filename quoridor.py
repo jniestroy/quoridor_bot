@@ -39,10 +39,10 @@ def main():
     startTime = datetime.now()
     game = Game([ # 2 or 4
         My_Bot("Justin"),
-        #My_Bot1("Alain")
+        My_Bot1("Alain")
         #BuilderBot("Benoit"),
         #BuilderBot("Clément"),
-        Human("Pierre")
+        #Human("Pierre")
         #RandomBot("Justin"),
         
         #RandomBot("Nick")

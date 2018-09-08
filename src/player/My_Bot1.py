@@ -66,12 +66,13 @@ class My_Bot1(IBot):
             wall = False
         #print(worst[0])
         
-        if random.randint(0,5) == 0 and self.remainingFences() > 0 and len(board.storedValidFencePlacings) > 0 and wall:
+        if random.randint(0,1) == 0 and self.remainingFences() > 0 and len(board.storedValidFencePlacings) > 0 and wall:
             #print(rand[0])
-            if (diff - worst[0]) > (rand[0] - diff) and board.isValidFencePlacing(fence1.coord,fence1.direction) and random.randint(0,5) == 0:
-            #if board.isValidFencePlacing(fence1.coord,fence1.direction):
-                randomFencePlacing = fence1
-                block_worst = 1
+            if (diff - worst[0]) > (rand[0] - diff) and board.isValidFencePlacing(fence1.coord,fence1.direction) and random.randint(0,2) == 0:
+                for fences in board.storedValidFencePlacings:
+                    if fences.coord == fence1.coord and fences.direction == fence1.direction:
+                        randomFencePlacing = fences
+                        block_worst = 1
                 
             else:
                 randomFencePlacing = rand[1]
