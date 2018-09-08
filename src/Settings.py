@@ -7,7 +7,7 @@
 #
 
 DEBUG     = True  # Display additionnal logs on console
-INTERFACE = True # Display window if true
+INTERFACE = 0 # Display window if true
 TEMPO_SEC = 0.00  # Sleep time between each player, in seconds (default: 0)
 
 TRACE = {
