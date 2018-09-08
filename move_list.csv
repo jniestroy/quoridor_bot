@@ -1,0 +1,26 @@
+0,from 40 to 41,m
+1,from 48 to 47,m
+0,from 41 to 42,m
+1,from 47 to 46,m
+0,from 42 to 43,m
+1,from 46 to 45,m
+0,from 43 to 44,m
+1,H-fence at 36,w,
+0,from 44 to 55 through 45,m
+1,from 45 to 44,m
+0,from 55 to 56,m
+1,from 44 to 43,m
+0,from 56 to 57,m
+1,H-fence at 48,w,
+0,H-fence at 32,w,
+1,from 43 to 53,m
+0,from 57 to 67,m
+1,H-fence at 68,w,
+0,from 67 to 77,m
+1,from 53 to 52,m
+0,H-fence at 79,
+1,V-fence at 86,w,
+0,from 77 to 67,m
+1,from 52 to 51,m
+0,H-fence at 59,
+1,from 51 to 50,m
