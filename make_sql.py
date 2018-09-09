@@ -76,5 +76,38 @@ def main():
        
     else:
         print("Error! cannot create the database connection.")
+    database = "C:\\sqlite\quoridor2.db"
+    conn = create_connection(database)
+    if conn is not None:
+        # create projects table
+        create_table(conn, sql_create_projects_table)
+       
+    else:
+        print("Error! cannot create the database connection.")
+    database = "C:\\sqlite\quoridor3.db"
+    conn = create_connection(database)
+    if conn is not None:
+        # create projects table
+        create_table(conn, sql_create_projects_table)
+       
+    else:
+        print("Error! cannot create the database connection.")
+    database = "C:\\sqlite\quoridor4.db"
+    conn = create_connection(database)
+    if conn is not None:
+        # create projects table
+        create_table(conn, sql_create_projects_table)
+       
+    else:
+        print("Error! cannot create the database connection.")
+    database = "C:\\sqlite\quoridor5.db"
+    conn = create_connection(database)
+    if conn is not None:
+        # create projects table
+        create_table(conn, sql_create_projects_table)
+       
+    else:
+        print("Error! cannot create the database connection.")
+
 if __name__ == '__main__':
     main()

@@ -37,7 +37,7 @@ def main():
     Create a game instance and launch game rounds.
     """
     startTime = time.time()
-    time_to_run = int(sys.argv[1])*60
+    time_to_run = int(sys.argv[1])*60 #time you want program to run for in minutes
     game = Game([ # 2 or 4
         My_Bot("Justin"),
         My_Bot1("Alain")
