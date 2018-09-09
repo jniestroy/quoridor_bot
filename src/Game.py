@@ -125,7 +125,7 @@ class Game:
                 # The player chooses its action (manually for human players or automatically for bots)
                 if currentPlayerIndex == 0 or currentPlayerIndex == 1:
                     action,best_wall,worst_wall,block_worst = player.play(self.board,opp.pawn.coord)
-                else:
+                else: #only use if human is playing game
                     action = player.play(self.board)
                     best_wall,worst_wall,block_worst = 0,0,0
                 
@@ -152,7 +152,7 @@ class Game:
                 elif isinstance(action, Quit):
                     finished = True
                     # print("Player %s quitted" % player.name)
-                this_move = [currentPlayerIndex,p1,p2,player.remainingFences(),player.remainingFences()-opp.remainingFences(),best_wall,worst_wall,move,block_worst]
+                this_move = [currentPlayerIndex,p1,p2 - p1,player.remainingFences(),player.remainingFences()-opp.remainingFences(),best_wall,worst_wall,move,block_worst]
                 currentPlayerIndex = (currentPlayerIndex + 1) % playerCount
                 if INTERFACE:
                 	time.sleep(TEMPO_SEC)
