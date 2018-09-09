@@ -36,7 +36,8 @@ def main():
     Main function of quoridor. 
     Create a game instance and launch game rounds.
     """
-    startTime = datetime.now()
+    startTime = time.time()
+    time_to_run = int(sys.argv[1])
     game = Game([ # 2 or 4
         My_Bot("Justin"),
         My_Bot1("Alain")
@@ -47,9 +48,9 @@ def main():
         
         #RandomBot("Nick")
     ], totalFenceCount = 20, cols = 9, rows = 9)
-    game.start(10) # rounds
+    game.start(startTime,time_to_run) # rounds
     game.end()
-    print(datetime.now() - startTime)
+    
     global TRACE
     # print("TRACE")
     # for i in TRACE:

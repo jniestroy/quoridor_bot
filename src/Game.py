@@ -89,15 +89,16 @@ class Game:
             self.players.append(players[i])
         self.board = board
     
-    def start(self, roundCount = 1):
+    def start(self, start_time,roundCount = 1):
         """
         Launch a series of rounds; for each round, ask successively each player to play. 
         """
         database = "C:\\sqlite\quoridor.db"
         conn = create_connection(database)
-        roundNumberZeroFill = len(str(roundCount))
+        #roundNumberZeroFill = len(str(roundCount))
         # For each round
-        for roundNumber in range(1, roundCount + 1):
+        #for roundNumber in range(1, roundCount + 1):
+        while time.time() < (roundCount + start_time):
             # Reset board stored valid pawn moves & fence placings, and redraw empty grid
             self.board.initStoredValidActions()
             self.board.draw()
@@ -140,7 +141,7 @@ class Game:
                         with conn:
                             for move in move_list:
                                 move_id = create_move(conn, move)
-                        print(move_list)
+                        
 
                         # print("Player %s won" % player.name)
                         player.score += 1
